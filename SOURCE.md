@@ -1,47 +1,59 @@
-# שתי הצעות למקורות מידע לפרויקט - תרגיל 1, סעיף 9(ב)
 
-## הצעה 1: מרדף אחרי הזוהר הצפוני (עדיפות ראשונה)
+# Project Data Source Proposals
 
-**הרעיון:** לבדוק מתי והיכן נוצרים חלונות הזדמנות לצפייה בזוהר הצפוני באזורי טרומסו ורייקיאוויק, וכמה תחזיות הפעילות משתנות לאורך היום. התחזית אינה מוכיחה שנצפה זוהר בפועל.
+## Proposal 1: Finding the Best Time to See the Northern Lights
 
-**המידע והמקורות:** תחזית NOAA כוללת זמני עדכון, עוצמת פעילות ומפה לפי קואורדינטות. בהמשך אפשר לשלב עננות כדי להבין אם התנאים לצפייה מתאימים.
+First choice
 
-- NOAA (נתוני JSON חיים): https://services.swpc.noaa.gov/json/ovation_aurora_latest.json
-- NOAA (פלט טקסט של אותו מודל): https://services.swpc.noaa.gov/text/ovation_latest_aurora_n.txt
-- מקור משלים אפשרי — תחזית עננות Open-Meteo: https://open-meteo.com/en/docs
+The goal is to identify when and where conditions may be suitable for seeing the Northern Lights near Tromso and Reykjavik, and to examine how aurora forecasts change throughout the day. A favorable forecast does not necessarily mean that the Northern Lights will actually be visible.
 
-**תדירות:** מקור NOAA מתעדכן בקירוב כל 5 דקות; נאסוף דגימה כל 15 דקות. **גודל:** כ־1–3KB לדגימה, בתנאי ששומרים מראש רק את האזורים והשדות הרלוונטיים; כ־7–21MB בעשרה שבועות (הערכה). **גישה:** חינם, בלי חשבון, סיסמה או מפתח API.
+NOAA provides updated aurora forecasts with timestamps, activity levels, and geographic coordinates. Cloud cover data could be added later to help assess viewing conditions.
 
-**דגימה אמיתית מ־NOAA, בתאריך 6.11.2026:**
+NOAA live JSON data: https://services.swpc.noaa.gov/json/ovation_aurora_latest.json
 
-```text
-Model_Run Time: 2026-11-06 13:10:00
-Observation Time: 2026-11-06 13:07:00+00:00
-Forecast Time:    2026-11-06 14:21:10.777085
-Hemispheric Power:     17.8
-```
+NOAA text output: https://services.swpc.noaa.gov/text/ovation_latest_aurora_n.txt
 
-**מה ייחודי לאיסוף:** התחזית המרחבית העדכנית מוחלפת בתחזית הבאה, ולכן שמירת תמונות מצב במועדי הדגימה תאפשר לחקור את השינויים שלאורך הזמן.
+Possible additional source for cloud cover: https://open-meteo.com/en/docs
 
-## הצעה 2: טיול בלונדון - האם אפשר להסתמך על אופניים שיתופיים? (עדיפות שנייה)
+NOAA updates its forecast approximately every five minutes. We plan to collect data every 15 minutes. Each sample should be around 1 to 3 KB if we save only the relevant locations and fields. The estimated total for ten weeks is 7 to 21 MB. The data is free and does not require an account, password, or API key.
 
-**הרעיון:** לבדוק אם תיירים יכולים למצוא אופניים פנויים וגם מקום להחזירם בתחנות שליד אטרקציות בלונדון; להשוות בין שעות ביום ובין ימי חול לסופי שבוע. אפשר לבחון במקביל אם יש שיבושים ברכבת התחתית.
+Actual NOAA sample from November 6, 2026:
 
-**המידע והמקורות:** נתוני TfL כוללים מספר אופניים פנויים, מספר מקומות עגינה פנויים, מזהה תחנה וזמן עדכון; מקור נוסף מציג סטטוס עדכני של קו רכבת תחתית.
+    Model_Run Time: 2026-11-06 13:10:00
+    Observation Time: 2026-11-06 13:07:00+00:00
+    Forecast Time: 2026-11-06 14:21:10.777085
+    Hemispheric Power: 17.8
 
-- תחנות אופניים TfL: https://api.tfl.gov.uk/BikePoint
-- סטטוס קו פיקדילי TfL: https://api.tfl.gov.uk/Line/piccadilly/Status
+The current geographic forecast is replaced when a new forecast is published. Saving regular snapshots would let us examine changes in the forecast over time.
 
-**תדירות:** איסוף כל 15 דקות. **גודל:** כ־2–4KB לדגימה עבור 10–15 תחנות נבחרות; כ־13–27MB בעשרה שבועות (הערכה). **גישה:** חינם, ללא סיסמה או מפתח API בקצב האיסוף המתוכנן.
+## Proposal 2: Can Tourists Rely on Rental Bikes in London?
 
-**דגימה אמיתית מ־TfL, בתאריך 6.11.2026 (השדות הרלוונטיים בלבד):**
+Second choice
 
-```json
-{"id":"BikePoints_1","commonName":"River Street , Clerkenwell","NbBikes":"2","NbEmptyDocks":"11","modified":"2026-11-06T12:11:14.783Z"}
-```
+The goal is to find out whether tourists can reliably find available bikes and empty docking spaces near London's main attractions. We will compare availability at different times of day and on weekdays and weekends. We could also examine whether disruptions on the Underground are related to bike availability.
 
-בפלט המקורי שדות מספר האופניים ומקומות העגינה מופיעים בתוך `additionalProperties`; הדוגמה מציגה אותם בצורה מקוצרת.
+Transport for London provides current data on available bikes, empty docking spaces, station identifiers, and update times. A separate endpoint provides the current status of an Underground line.
 
-**מה ייחודי לאיסוף:** מספר האופניים ומקומות העגינה הפנויים משתנה לאורך היום, והממשק מציג את המצב הנוכחי ולא היסטוריה מלאה של כל מצב קודם.
+TfL bike stations: https://api.tfl.gov.uk/BikePoint
 
-**דירוג העדפה:** 1 - הזוהר הצפוני; 2 - אופניים שיתופיים בלונדון. שני הרעיונות מיועדים לאיסוף מידע חי לאורך הסמסטר, בהיקף נמוך ממגבלת 500MB.
+TfL Piccadilly line status: https://api.tfl.gov.uk/Line/piccadilly/Status
+
+We plan to collect data every 15 minutes. A sample covering 10 to 15 selected stations should be around 2 to 4 KB. The estimated total for ten weeks is 13 to 27 MB. Access is free, and the planned collection does not require a password or API key.
+
+Actual TfL sample from November 6, 2026, showing only the relevant fields:
+
+    {
+      "id": "BikePoints_1",
+      "commonName": "River Street , Clerkenwell",
+      "NbBikes": "2",
+      "NbEmptyDocks": "11",
+      "modified": "2026-11-06T12:11:14.783Z"
+    }
+
+In the original response, the bike and docking space counts are stored within additionalProperties. They are shown here in a shorter format.
+
+Bike and docking space availability changes throughout the day. The API provides the current situation rather than a complete history of previous availability.
+
+## Preference Ranking
+
+Our first choice is the Northern Lights project, followed by the London bike availability project. Both would involve collecting live data throughout the semester, with estimated storage requirements below the 500 MB limit.
